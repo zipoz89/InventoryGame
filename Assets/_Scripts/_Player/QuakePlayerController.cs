@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,33 +14,37 @@ struct Cmd
 }
 public class QuakePlayerController : MonoBehaviour
 {
-    public Transform playerView;     // Camera
-    public float playerViewYOffset = 0.6f; // The height at which the camera is bound to
-    public float xMouseSensitivity = 30.0f;
-    public float yMouseSensitivity = 30.0f;
+    [SerializeField]
+    private InputProvider _inputProvider;
+        
+    
+    [SerializeField] private Transform playerView;     // Camera
+    [SerializeField] private float playerViewYOffset = 0.6f; // The height at which the camera is bound to
+    [SerializeField] private float xMouseSensitivity = 30.0f;
+    [SerializeField] private float yMouseSensitivity = 30.0f;
 
     /*Frame occuring factors*/
-    public float gravity = 20.0f;
+    [SerializeField] private float gravity = 20.0f;
 
-    public float friction = 6; //Ground friction
+    [SerializeField] private float friction = 6; //Ground friction
 
     /* Movement stuff */
-    public float moveSpeed = 7.0f;                // Ground move speed
-    public float runAcceleration = 14.0f;         // Ground accel
-    public float runDeacceleration = 10.0f;       // Deacceleration that occurs when running on the ground
-    public float airAcceleration = 2.0f;          // Air accel
-    public float airDecceleration = 2.0f;         // Deacceleration experienced when ooposite strafing
-    public float airControl = 0.3f;               // How precise air control is
-    public float sideStrafeAcceleration = 50.0f;  // How fast acceleration occurs to get up to sideStrafeSpeed when
-    public float sideStrafeSpeed = 1.0f;          // What the max speed to generate when side strafing
-    public float jumpSpeed = 8.0f;                // The speed at which the character's up axis gains when hitting jump
-    public bool holdJumpToBhop = false;           // When enabled allows player to just hold jump button to keep on bhopping perfectly. Beware: smells like casual.
+    [SerializeField] private float moveSpeed = 7.0f;                // Ground move speed
+    [SerializeField] private float runAcceleration = 14.0f;         // Ground accel
+    [SerializeField] private float runDeacceleration = 10.0f;       // Deacceleration that occurs when running on the ground
+    [SerializeField] private float airAcceleration = 2.0f;          // Air accel
+    [SerializeField] private float airDecceleration = 2.0f;         // Deacceleration experienced when ooposite strafing
+    [SerializeField] private float airControl = 0.3f;               // How precise air control is
+    [SerializeField] private float sideStrafeAcceleration = 50.0f;  // How fast acceleration occurs to get up to sideStrafeSpeed when
+    [SerializeField] private float sideStrafeSpeed = 1.0f;          // What the max speed to generate when side strafing
+    [SerializeField] private float jumpSpeed = 8.0f;                // The speed at which the character's up axis gains when hitting jump
+    [SerializeField] private bool holdJumpToBhop = false;           // When enabled allows player to just hold jump button to keep on bhopping perfectly. Beware: smells like casual.
 
     /*print() style */
-    public GUIStyle style;
+    [SerializeField] private GUIStyle style;
 
     /*FPS Stuff */
-    public float fpsDisplayRate = 4.0f; // 4 updates per sec
+    [SerializeField] private float fpsDisplayRate = 4.0f; // 4 updates per sec
 
     private int frameCount = 0;
     private float dt = 0.0f;
@@ -64,8 +69,43 @@ public class QuakePlayerController : MonoBehaviour
     // Player commands, stores wish commands that the player asks for (Forward, back, jump, etc)
     private Cmd _cmd;
 
+    private void Awake()
+    {
+        Initialize(_inputProvider);
+    }
+
+    public void Initialize(InputProvider input)
+    {
+        _inputProvider = input;
+        SubscribeToInput();
+    
+    }
+    
+    private void OnDestroy()
+    {
+        UnsubscribeToInput();
+    }
+    
+    private void SubscribeToInput()
+    {
+        _inputProvider.OnJump += OnJumpPressed;
+        _inputProvider.OnMove += SetMovementDir;
+
+    }
+    
+    private void UnsubscribeToInput()
+    {
+        _inputProvider.OnJump -= OnJumpPressed;
+        _inputProvider.OnMove -= SetMovementDir;
+    }
+    
     private void Start()
     {
+        /* Ensure that the cursor is locked into the screen */
+        if (Cursor.lockState != CursorLockMode.Locked) {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        
         // Hide the cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -97,15 +137,11 @@ public class QuakePlayerController : MonoBehaviour
             frameCount = 0;
             dt -= 1.0f / fpsDisplayRate;
         }
-        /* Ensure that the cursor is locked into the screen */
-        if (Cursor.lockState != CursorLockMode.Locked) {
-            if (Input.GetButtonDown("Fire1"))
-                Cursor.lockState = CursorLockMode.Locked;
-        }
+
 
         /* Camera rotation stuff, mouse controls this shit */
-        rotX -= Input.GetAxisRaw("Mouse Y") * xMouseSensitivity * 0.02f;
-        rotY += Input.GetAxisRaw("Mouse X") * yMouseSensitivity * 0.02f;
+        rotX -= _inputProvider.MouseDelta.y * xMouseSensitivity * 0.02f;
+        rotY += _inputProvider.MouseDelta.x * yMouseSensitivity * 0.02f;
 
         // Clamp the X rotation
         if(rotX < -90)
@@ -119,7 +155,7 @@ public class QuakePlayerController : MonoBehaviour
         
 
         /* Movement, here's the important part */
-        QueueJump();
+        QueueJumpHold();
         if(_controller.isGrounded)
             GroundMove();
         else if(!_controller.isGrounded)
@@ -149,29 +185,41 @@ public class QuakePlayerController : MonoBehaviour
     /**
      * Sets the movement direction based on player input
      */
-    private void SetMovementDir()
+    private void SetMovementDir(Vector2 moveInput)
     {
-        _cmd.forwardMove = Input.GetAxisRaw("Vertical");
-        _cmd.rightMove   = Input.GetAxisRaw("Horizontal");
+        _cmd.forwardMove = moveInput.y;
+        _cmd.rightMove   = moveInput.x;
     }
 
     /**
      * Queues the next jump just like in Q3
      */
-    private void QueueJump()
+
+    private void OnJumpPressed(bool pressed)
+    {
+        if (pressed)
+        {
+            if (!wishJump)
+            {
+                wishJump = true;
+            }
+        }
+        else
+        {
+            wishJump = false;
+        }
+
+
+    }
+    
+    private void QueueJumpHold()
     {
         if(holdJumpToBhop)
         {
-            wishJump = Input.GetButton("Jump");
-            return;
+            wishJump = _inputProvider.IsJumpPressed;
         }
-
-        if(Input.GetButtonDown("Jump") && !wishJump)
-            wishJump = true;
-        if(Input.GetButtonUp("Jump"))
-            wishJump = false;
     }
-
+    
     /**
      * Execs when the player is in the air
     */
@@ -180,8 +228,6 @@ public class QuakePlayerController : MonoBehaviour
         Vector3 wishdir;
         float wishvel = airAcceleration;
         float accel;
-        
-        SetMovementDir();
 
         wishdir =  new Vector3(_cmd.rightMove, 0, _cmd.forwardMove);
         wishdir = transform.TransformDirection(wishdir);
@@ -268,9 +314,7 @@ public class QuakePlayerController : MonoBehaviour
             ApplyFriction(1.0f);
         else
             ApplyFriction(0);
-
-        SetMovementDir();
-
+        
         wishdir = new Vector3(_cmd.rightMove, 0, _cmd.forwardMove);
         wishdir = transform.TransformDirection(wishdir);
         wishdir.Normalize();

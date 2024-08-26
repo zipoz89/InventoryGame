@@ -37,6 +37,15 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""ea848b00-d8ab-4be5-bcf2-304b763bec35"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""821b2397-22b2-4a5a-89ef-a5a0afd86afe"",
@@ -112,6 +121,17 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17767ee2-5cdb-4a63-8b89-3696e35a3e11"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -121,6 +141,7 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
         // FPSPlayer
         m_FPSPlayer = asset.FindActionMap("FPSPlayer", throwIfNotFound: true);
         m_FPSPlayer_Move = m_FPSPlayer.FindAction("Move", throwIfNotFound: true);
+        m_FPSPlayer_Jump = m_FPSPlayer.FindAction("Jump", throwIfNotFound: true);
         m_FPSPlayer_Interact = m_FPSPlayer.FindAction("Interact", throwIfNotFound: true);
     }
 
@@ -184,12 +205,14 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
     private readonly InputActionMap m_FPSPlayer;
     private List<IFPSPlayerActions> m_FPSPlayerActionsCallbackInterfaces = new List<IFPSPlayerActions>();
     private readonly InputAction m_FPSPlayer_Move;
+    private readonly InputAction m_FPSPlayer_Jump;
     private readonly InputAction m_FPSPlayer_Interact;
     public struct FPSPlayerActions
     {
         private @InventoryGameDefaultInput m_Wrapper;
         public FPSPlayerActions(@InventoryGameDefaultInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_FPSPlayer_Move;
+        public InputAction @Jump => m_Wrapper.m_FPSPlayer_Jump;
         public InputAction @Interact => m_Wrapper.m_FPSPlayer_Interact;
         public InputActionMap Get() { return m_Wrapper.m_FPSPlayer; }
         public void Enable() { Get().Enable(); }
@@ -203,6 +226,9 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
@@ -213,6 +239,9 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
@@ -236,6 +265,7 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
     public interface IFPSPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
     }
 }
