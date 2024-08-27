@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: SpikedPlankRecipe
   m_EditorClassIdentifier: 
   Ingredients:
-  - Item: {fileID: 11400000, guid: 49dc5d74ccac05a4da39d1dcc1147a0e, type: 2}
+  - Item: {fileID: 11400000, guid: 4ceabe6ca700de242b19fd61d2476bcd, type: 2}
     Amount: 1
-  - Item: {fileID: 11400000, guid: 49dc5d74ccac05a4da39d1dcc1147a0e, type: 2}
-    Amount: 1
-  Result:
   - Item: {fileID: 11400000, guid: 3cdcf8ab38a960a41b1e295554456763, type: 2}
     Amount: 1
-  CraftingChance: 60
+  Result:
+  - Item: {fileID: 11400000, guid: d5c42a54597655b449e665afeea63dce, type: 2}
+    Amount: 1
+  CraftingChance: 20

@@ -1,4 +1,5 @@
 ﻿using _Scripts._InputSystem;
+using _Scripts._Items;
 using UnityEngine;
 
 namespace _Scripts._Player
@@ -42,9 +43,9 @@ namespace _Scripts._Player
             }
         }
 
-        public void CollcetItem()
+        public void CollcetItem(Item item)
         {
-            Debug.Log("Collect");
+            Debug.Log("Collect " + item.Name);
         }
     }
 }
