@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _Scripts._InputSystem;
+using UnityEngine;
 
 namespace _Scripts._Player
 {
