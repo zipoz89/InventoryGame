@@ -1,20 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemDisplay : MonoBehaviour
+namespace _Scripts._Ui
 {
-    [SerializeField] private Image itemSprite;
-    [SerializeField] private TextMeshProUGUI itemName;
-    [SerializeField] private TextMeshProUGUI itemAmount;
-
-    public Action OnDropRequested;
-    
-    public void DropItem()
+    public class ItemDisplay : MonoBehaviour
     {
-        OnDropRequested?.Invoke();
+        [SerializeField] private Image itemSprite;
+        [SerializeField] private TextMeshProUGUI itemName;
+        [SerializeField] private TextMeshProUGUI itemAmount;
+
+        public Action OnDropRequested;
+    
+        public void DropItem()
+        {
+            OnDropRequested?.Invoke();
+        }
     }
 }

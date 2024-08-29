@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: f85efc9f9ffccba468d6812235ea8367
+guid: 59277a6fe5e168a42a200ff84865eae0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - UiSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

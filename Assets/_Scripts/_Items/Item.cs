@@ -2,8 +2,9 @@ using UnityEngine;
 
 namespace _Scripts._Items
 {
-    [CreateAssetMenu(menuName = "InventoryGame/Items/Item")]
-    public class Item : ScriptableObject
+
+    [System.Serializable]
+    public class Item
     {
         public string Name;
         public Sprite UiSprite;

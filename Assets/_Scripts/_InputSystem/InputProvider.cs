@@ -7,20 +7,34 @@ namespace _Scripts._InputSystem
     public class InputProvider : MonoBehaviour
     {
         private InventoryGameDefaultInput input;
-    
+        private bool updateMouseDelta = true;
+
+        public bool UpdateMouseDelta
+        {
+            get => updateMouseDelta;
+            set
+            {
+                mouseDelta = Vector2.zero;
+                updateMouseDelta = value;
+            }
+        }
+
         private bool isInteractPressed = false;
         private bool isJumpPressed = false;
+        private bool isInventoryPressed = false;
         private Vector2 moveVector = Vector2.zero;
         private Vector2 mouseDelta = Vector2.zero;
     
         public bool IsInteractPressed => isInteractPressed;
         public bool IsJumpPressed => isJumpPressed;
+        public bool IsInventoryPressed => isInventoryPressed;
         public Vector2 MoveVector => moveVector; 
         public Vector2 MouseDelta => mouseDelta; 
     
         public event Action<Vector2> OnMove;
         public event Action<bool> OnInteract;
         public event Action<bool> OnJump;
+        public event Action<bool> OnInventory;
 
         private void Awake()
         {
@@ -33,15 +47,24 @@ namespace _Scripts._InputSystem
             input.FPSPlayer.Move.performed += OnMovePerformed;
             input.FPSPlayer.Interact.performed += OnInteractPerformed;
             input.FPSPlayer.Jump.performed += OnJumpPerformed;
+            input.FPSPlayer.OpenInventory.performed += OnInventoryPerformed;
+
         
             input.FPSPlayer.Move.canceled += OnMoveCanceled;
             input.FPSPlayer.Interact.canceled += OnInteractPerformed;
             input.FPSPlayer.Jump.canceled += OnJumpPerformed;
+            input.FPSPlayer.OpenInventory.canceled += OnInventoryPerformed;
         }
+
+
 
         void Update()
         {
-            mouseDelta = Mouse.current.delta.ReadValue();
+            if (UpdateMouseDelta)
+            {
+                mouseDelta = Mouse.current.delta.ReadValue();
+            }
+
         }
 
         private void OnDisable()
@@ -50,10 +73,12 @@ namespace _Scripts._InputSystem
             input.FPSPlayer.Move.performed -= OnMovePerformed;
             input.FPSPlayer.Interact.performed -= OnInteractPerformed;
             input.FPSPlayer.Jump.performed -= OnJumpPerformed;
+            input.FPSPlayer.OpenInventory.performed -= OnInventoryPerformed;
         
             input.FPSPlayer.Move.canceled -= OnMoveCanceled;
             input.FPSPlayer.Interact.canceled -= OnInteractPerformed;
             input.FPSPlayer.Jump.canceled -= OnJumpPerformed;
+            input.FPSPlayer.OpenInventory.canceled -= OnInventoryPerformed;
         }
 
         private void OnMovePerformed(InputAction.CallbackContext ctx)
@@ -81,6 +106,11 @@ namespace _Scripts._InputSystem
             OnJump?.Invoke(isInteractPressed);
         }
 
-    
+        private void OnInventoryPerformed(InputAction.CallbackContext ctx)
+        {
+            isInventoryPressed = ctx.performed && !ctx.canceled;
+        
+            OnInventory?.Invoke(isInventoryPressed);
+        }
     }
 }

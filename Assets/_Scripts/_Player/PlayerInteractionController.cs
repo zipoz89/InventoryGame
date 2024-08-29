@@ -9,11 +9,13 @@ namespace _Scripts._Player
         [SerializeField] private Camera camera;
         [SerializeField] private float interactionDistance = 5f;
         private InputProvider _inputProvider;
+        private PlayerInventory _playerInventory;
         private IInteractable activeInteracable;
 
-        public void Initialize(InputProvider input)
+        public void Initialize(InputProvider input, PlayerInventory playerInventory)
         {
             _inputProvider = input;
+            _playerInventory = playerInventory;
             _inputProvider.OnInteract += Interact;
         }
 
@@ -43,9 +45,9 @@ namespace _Scripts._Player
             }
         }
 
-        public void CollcetItem(Item item)
+        public bool TryCollcetItem(Item item1)
         {
-            Debug.Log("Collect " + item.Name);
+            return _playerInventory.TryCollectItem(item1);
         }
     }
 }

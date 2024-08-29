@@ -5,10 +5,11 @@ using _Scripts._Items;
 using _Scripts._Player;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Resource : MonoBehaviour, IInteractable
 {
-    [SerializeField] private Item itemDrop;
+    [SerializeField] private ItemScriptableObject itemDrop;
 
     private int currentResources = 1; 
     [SerializeField] private int maxResources = 1;
@@ -25,8 +26,12 @@ public class Resource : MonoBehaviour, IInteractable
             return false;
         }
 
-        currentResources--;
-        playerController.CollcetItem(itemDrop);
-        return true;
+        if(playerController.TryCollcetItem(itemDrop.Item))
+        {
+            currentResources--;
+            return true;
+        }
+
+        return false;
     }
 }

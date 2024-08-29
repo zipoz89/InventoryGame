@@ -1,9 +1,30 @@
-﻿namespace _Scripts._Items
+﻿using UnityEngine.Serialization;
+
+namespace _Scripts._Items
 {
     [System.Serializable]
     public class ItemSlot
     {
-        public Item Item;
-        public int Amount = 1;
+        public Item item;
+        public int Amount = 0;
+
+        public bool TryAddItem(Item itemToAdd)
+        {
+            if (item == null)
+            {
+                item = itemToAdd;
+                Amount = 1;
+                return true;
+            }
+            else if (item.Name == itemToAdd.Name && Amount < item.MaxStackSize)
+            {
+                Amount++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

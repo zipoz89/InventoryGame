@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f85efc9f9ffccba468d6812235ea8367, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ef39dc1501345d8b6476f55add80513, type: 3}
   m_Name: Nail
   m_EditorClassIdentifier: 
-  Name: Nail
-  UiSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  MaxStackSize: 64
+  Item:
+    Name: Nails
+    UiSprite: {fileID: 21300000, guid: 8b68e4fd62d209246bf6b3c54908d28b, type: 3}
+    MaxStackSize: 64
