@@ -8,12 +8,26 @@ public class ItemDrop : MonoBehaviour
 {
     [SerializeField] private ItemScriptableObject itemDefinition;
     [SerializeField] private Item item;
+    [SerializeField] private Rigidbody rb;
 
-    public Item Item => item;
+    public Rigidbody Rb => rb;
+
+    public Item Item
+    {
+        get => item;
+        set => item = value;
+    }
+
+    
 
     private void Awake()
     {
-        item = itemDefinition.Item;
+        if (itemDefinition)
+        {
+            item = itemDefinition.Item;
+            itemDefinition = null;
+        }
+
     }
     
 }

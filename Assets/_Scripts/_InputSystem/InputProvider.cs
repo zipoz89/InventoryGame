@@ -7,15 +7,15 @@ namespace _Scripts._InputSystem
     public class InputProvider : MonoBehaviour
     {
         private InventoryGameDefaultInput input;
-        private bool updateMouseDelta = true;
+        private bool _playerInInventory = false;
 
-        public bool UpdateMouseDelta
+        public bool PlayerInInventory
         {
-            get => updateMouseDelta;
+            get => _playerInInventory;
             set
             {
                 mouseDelta = Vector2.zero;
-                updateMouseDelta = value;
+                _playerInInventory = value;
             }
         }
 
@@ -60,7 +60,7 @@ namespace _Scripts._InputSystem
 
         void Update()
         {
-            if (UpdateMouseDelta)
+            if (!PlayerInInventory)
             {
                 mouseDelta = Mouse.current.delta.ReadValue();
             }
@@ -94,6 +94,11 @@ namespace _Scripts._InputSystem
         }
         private void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
+            if (_playerInInventory)
+            {
+                return;
+            }
+
             isInteractPressed = ctx.performed && !ctx.canceled;
             
             OnInteract?.Invoke(isInteractPressed);

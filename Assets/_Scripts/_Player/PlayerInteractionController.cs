@@ -52,16 +52,15 @@ namespace _Scripts._Player
         
         private void OnTriggerEnter(Collider other)
         {
-
-            Debug.Log(other.name);
-            
             if (other.TryGetComponent(out ItemDrop itemDrop))
             {
-                if (_playerInventory.TryCollectItem(itemDrop.Item))
+                if ( _playerInventory.TryCollectItem(itemDrop.Item))
                 {
+                    itemDrop.Item = null;
                     GenericObjectPooler.ReturnObjectToPool(itemDrop.gameObject, true);
                 }
             }
         }
+        
     }
 }

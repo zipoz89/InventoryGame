@@ -12,11 +12,15 @@ namespace _Scripts._Ui
         [SerializeField] private TextMeshProUGUI itemName;
         [SerializeField] private TextMeshProUGUI itemAmount;
 
-        public Action OnDropRequested;
+        private ItemSlot itemSlot;
+        
+        public Action<Item> OnItemDropped;
 
         public void SetUp(ItemSlot itemSlot)
         {
-            Debug.Log("Set up " + itemSlot.item.Name + " amopunt" + itemSlot.Amount);
+            //Debug.Log("Set up " + itemSlot.item.Name + " amopunt" + itemSlot.Amount);
+
+            this.itemSlot = itemSlot;
             
             itemSprite.sprite = itemSlot.item.UiSprite;
             itemName.text = itemSlot.item.Name;
@@ -25,7 +29,11 @@ namespace _Scripts._Ui
 
         public void DropItem()
         {
-            OnDropRequested?.Invoke();
+            if (itemSlot.TryDropItem())
+            {
+                OnItemDropped?.Invoke(itemSlot.item);
+            }
+
         }
     }
 }

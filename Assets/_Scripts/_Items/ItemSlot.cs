@@ -29,7 +29,26 @@ namespace _Scripts._Items
 
         public bool IsEmpty()
         {
-            return item == null;
+            return item == null || Amount == 0;
+        }
+
+        public bool TryDropItem()
+        {
+            if (item == null || item.Name == "")
+            {
+                return false;
+            }
+
+            if (Amount > 1)
+            {
+                Amount--;
+                return true;
+            }
+            else
+            {
+                Amount = 0;
+                return true;
+            }
         }
     }
 }
