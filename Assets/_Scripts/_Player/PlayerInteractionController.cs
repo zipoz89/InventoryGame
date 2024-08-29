@@ -45,9 +45,23 @@ namespace _Scripts._Player
             }
         }
 
-        public bool TryCollcetItem(Item item1)
+        public bool TryCollcetItem(Item item)
         {
-            return _playerInventory.TryCollectItem(item1);
+            return _playerInventory.TryCollectItem(item);
+        }
+        
+        private void OnTriggerEnter(Collider other)
+        {
+
+            Debug.Log(other.name);
+            
+            if (other.TryGetComponent(out ItemDrop itemDrop))
+            {
+                if (_playerInventory.TryCollectItem(itemDrop.Item))
+                {
+                    GenericObjectPooler.ReturnObjectToPool(itemDrop.gameObject, true);
+                }
+            }
         }
     }
 }

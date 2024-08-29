@@ -62,7 +62,7 @@ namespace _Scripts
             return spawnableObj;
         }
 
-        public static void ReturnObjectToPool(GameObject obj)
+        public static void ReturnObjectToPool(GameObject obj, bool destroyIfNoPoolFound = false)
         {
             if (obj == null)
             {
@@ -73,7 +73,15 @@ namespace _Scripts
 
             if (pool == null)
             {
-                Debug.LogError("Returning object without initialized pool " + obj.name, obj);
+                if (destroyIfNoPoolFound)
+                {
+                    Destroy(obj);
+                }
+
+                else
+                {
+                    Debug.LogError("Returning object without initialized pool " + obj.name, obj);
+                }
             }
             else
             {
