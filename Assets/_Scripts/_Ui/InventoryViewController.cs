@@ -19,11 +19,14 @@ namespace _Scripts._Ui
         {
             ClearInventoryView();
             
+            Debug.Log("Rebuilduje?");
+            
             for (int i = 0; i < inventory.inventorySlots.Length; i++)
             {
                 if (!inventory.inventorySlots[i].IsEmpty())
                 {
                     var display = GenericObjectPooler.SpawnObject(itemDisplayInventoryPrefab.gameObject, Vector3.zero, Quaternion.identity, GenericObjectPooler.PoolType.ItemDisplay).GetComponent<ItemDisplayInventory>();
+                    display.gameObject.SetActive(true);
                     display.transform.SetParent(itemsContentPanel);
                     itemSlotsDisplay.Add( display);
                     display.OnItemDropped += ItemDropped;

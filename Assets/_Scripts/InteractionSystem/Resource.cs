@@ -26,7 +26,7 @@ public class Resource : MonoBehaviour, IInteractable
             return false;
         }
 
-        if(playerController.TryCollcetItem(itemDrop.Item))
+        if(playerController.TryCollectItem(new Item(itemDrop.Item)))
         {
             currentResources--;
             return true;

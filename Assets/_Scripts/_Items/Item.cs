@@ -9,10 +9,12 @@ namespace _Scripts._Items
         public string Name;
         public Sprite UiSprite;
         public int MaxStackSize = 64;
-        
-        public override bool Equals ( object obj )
+
+        public Item(Item item)
         {
-            return this.Name == (obj as Item)?.Name;
+            this.Name = item.Name;
+            this.UiSprite = item.UiSprite;
+            this.MaxStackSize = item.MaxStackSize;
         }
 
     }

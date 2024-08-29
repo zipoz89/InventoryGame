@@ -3,12 +3,17 @@ using _Scripts._Items;
 using _Scripts._Ui;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace _Scripts._Player
 {
     public class PlayerInventoryController : MonoBehaviour
     {
+        [SerializeField] private UnityEvent onCraftingSuccessful;
+        [SerializeField] private UnityEvent onCraftingUnsuccessful;
+        
         [SerializeField] private int startingSlots = 10;
         [SerializeField] private GameObject inventoryView;
         [SerializeField] private ItemDrop itemDropPrefab;
@@ -35,10 +40,15 @@ namespace _Scripts._Player
             craftingViewController.OnRecipeCraft += CraftRecpie;
         }
 
-        private void ItemDropped(Item item)
+        public void RebuildInventory()
         {
             inventoryViewController.RebuildInventoryView(inventory);
             craftingViewController.RebuildCraftingView(inventory);
+        }
+
+        private void ItemDropped(Item item)
+        {
+            RebuildInventory();
 
             var itemDrop = GenericObjectPooler.SpawnObject(itemDropPrefab.gameObject, this.transform.position + this.transform.TransformDirection(dropPosition), quaternion.identity,
                 GenericObjectPooler.PoolType.ItemDrop).GetComponent<ItemDrop>();
@@ -48,14 +58,13 @@ namespace _Scripts._Player
 
         public bool TryCollectItem(Item item)
         {
-            var result = inventory.TryCollectItem(item);
+            var collected = inventory.TryCollectItem(item);
             if (true)
             {
-                inventoryViewController.RebuildInventoryView(inventory);
-                craftingViewController.RebuildCraftingView(inventory);
+                RebuildInventory();
             }
 
-            return result;
+            return collected;
         }
 
         private void SwitchInventory(bool pressed)
@@ -75,8 +84,7 @@ namespace _Scripts._Player
                 }
                 else
                 {
-                    inventoryViewController.RebuildInventoryView(inventory);
-                    craftingViewController.RebuildCraftingView(inventory);
+                    RebuildInventory();
                     isInventoryOpen = true;
                     inventoryView.SetActive(isInventoryOpen);
                     
@@ -90,6 +98,38 @@ namespace _Scripts._Player
         
         private void CraftRecpie(CraftingRecipe recpie)
         {
+            inventory.ConsumeItems(recpie);
+            RebuildInventory();
+            if (Random.Range(0, 100f) < recpie.CraftingChance) //Crafting success
+            {
+                Debug.Log("Crafting success ");
+                
+                foreach (var results in recpie.Result)
+                {
+                    for (int i = 0; i < results.Amount; i++)
+                    {
+                        var collected = inventory.TryCollectItem(new Item(results.item.Item));
+
+                        if (!collected)
+                        {
+                            ItemDropped(results.item.Item);
+                        }
+                    }
+                }
+                
+                RebuildInventory();
+                
+                onCraftingSuccessful?.Invoke();
+            }
+            else //Crafting failed
+            {
+                Debug.Log("Crafting failed");
+                
+                RebuildInventory();
+                
+                onCraftingUnsuccessful?.Invoke();
+            }
+            
         }
     }
 }

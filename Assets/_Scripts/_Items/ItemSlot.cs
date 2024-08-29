@@ -1,4 +1,5 @@
-﻿using UnityEngine.Serialization;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Scripts._Items
 {
@@ -32,22 +33,43 @@ namespace _Scripts._Items
             return item == null || Amount == 0;
         }
 
-        public bool TryDropItem()
+        public bool TryDropItem(out Item itemOut)
         {
             if (item == null || item.Name == "")
             {
+                itemOut = null;
                 return false;
             }
 
             if (Amount > 1)
             {
                 Amount--;
+                itemOut = item;
                 return true;
             }
             else
             {
-                Amount = 0;
+                itemOut = new Item(item);
+                Clear();
                 return true;
+            }
+        }
+
+        private void Clear()
+        {
+            Amount = 0;
+            item = null;
+        }
+
+        public void ConsumeGreedy(int amountToConsume)
+        {
+            if (amountToConsume >= Amount)
+            {
+                Clear();
+            }
+            else
+            {
+                Amount -= amountToConsume;
             }
         }
     }

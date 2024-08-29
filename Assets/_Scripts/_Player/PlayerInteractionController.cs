@@ -45,7 +45,7 @@ namespace _Scripts._Player
             }
         }
 
-        public bool TryCollcetItem(Item item)
+        public bool TryCollectItem(Item item)
         {
             return _playerInventoryController.TryCollectItem(item);
         }

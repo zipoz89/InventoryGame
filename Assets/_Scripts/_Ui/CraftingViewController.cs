@@ -24,7 +24,7 @@ namespace _Scripts._Ui
             {
                 CraftingRecipe recipe = craftingRecipeTable.Recpies[i];
 
-                if (recipe.CheckIfCraftable(inventory))
+                if (inventory.ContainsAllIngredients(recipe.Ingredients))
                 {
                     var display = GenericObjectPooler.SpawnObject(craftingRecipeDisplayPrefab.gameObject, Vector3.zero, Quaternion.identity, GenericObjectPooler.PoolType.ItemDisplay).GetComponent<CraftingRecipeDisplay>();
                     display.transform.SetParent(recpiesContentParent);
@@ -56,6 +56,7 @@ namespace _Scripts._Ui
 
         private void OnCraft(CraftingRecipe recpie)
         {
+            Debug.Log("tet 1");
             OnRecipeCraft?.Invoke(recpie);
         }
     }

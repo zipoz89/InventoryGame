@@ -29,9 +29,9 @@ namespace _Scripts._Ui
 
         public void DropItem()
         {
-            if (itemSlot.TryDropItem())
+            if (itemSlot.TryDropItem(out Item item))
             {
-                OnItemDropped?.Invoke(itemSlot.item);
+                OnItemDropped?.Invoke(item);
             }
 
         }
