@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: StoneAxeRecipe
   m_EditorClassIdentifier: 
   Ingredients:
-  - Item: {fileID: 11400000, guid: 4ceabe6ca700de242b19fd61d2476bcd, type: 2}
+  - item: {fileID: 11400000, guid: 4ceabe6ca700de242b19fd61d2476bcd, type: 2}
     Amount: 1
-  - Item: {fileID: 11400000, guid: add5ccfabc7e002459c93b1b57cc1440, type: 2}
+  - item: {fileID: 11400000, guid: add5ccfabc7e002459c93b1b57cc1440, type: 2}
     Amount: 1
   Result:
-  - Item: {fileID: 11400000, guid: 8bdbff004ea43804e8d3312a5544c656, type: 2}
+  - item: {fileID: 11400000, guid: 8bdbff004ea43804e8d3312a5544c656, type: 2}
     Amount: 1
   CraftingChance: 80

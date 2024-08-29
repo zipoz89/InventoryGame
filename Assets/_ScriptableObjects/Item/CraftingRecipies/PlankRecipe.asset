@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlankRecipe
   m_EditorClassIdentifier: 
   Ingredients:
-  - Item: {fileID: 11400000, guid: eaeb7156ba642bf4491eb806445e90d3, type: 2}
+  - item: {fileID: 11400000, guid: eaeb7156ba642bf4491eb806445e90d3, type: 2}
     Amount: 2
   Result:
-  - Item: {fileID: 11400000, guid: 4ceabe6ca700de242b19fd61d2476bcd, type: 2}
+  - item: {fileID: 11400000, guid: 4ceabe6ca700de242b19fd61d2476bcd, type: 2}
     Amount: 1
   CraftingChance: 100

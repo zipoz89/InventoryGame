@@ -9,13 +9,13 @@ namespace _Scripts._Player
         [SerializeField] private Camera camera;
         [SerializeField] private float interactionDistance = 5f;
         private InputProvider _inputProvider;
-        private PlayerInventory _playerInventory;
+        private PlayerInventoryController _playerInventoryController;
         private IInteractable activeInteracable;
 
-        public void Initialize(InputProvider input, PlayerInventory playerInventory)
+        public void Initialize(InputProvider input, PlayerInventoryController playerInventoryController)
         {
             _inputProvider = input;
-            _playerInventory = playerInventory;
+            _playerInventoryController = playerInventoryController;
             _inputProvider.OnInteract += Interact;
         }
 
@@ -47,14 +47,14 @@ namespace _Scripts._Player
 
         public bool TryCollcetItem(Item item)
         {
-            return _playerInventory.TryCollectItem(item);
+            return _playerInventoryController.TryCollectItem(item);
         }
         
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent(out ItemDrop itemDrop))
             {
-                if ( _playerInventory.TryCollectItem(itemDrop.Item))
+                if ( _playerInventoryController.TryCollectItem(itemDrop.Item))
                 {
                     itemDrop.Item = null;
                     GenericObjectPooler.ReturnObjectToPool(itemDrop.gameObject, true);

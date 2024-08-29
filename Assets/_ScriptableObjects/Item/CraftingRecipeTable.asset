@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CraftingRecipeTable
   m_EditorClassIdentifier: 
   recpies:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: ff20c373470b8cd4f95e642546a0ce52, type: 2}
+  - {fileID: 11400000, guid: acf1bab293c0f044e995ceb7be9683c9, type: 2}
+  - {fileID: 11400000, guid: 1905e64f819e2c044889085bfd3ffaf3, type: 2}
+  - {fileID: 11400000, guid: f34315ee48a8ad04aa5c41c593fdf73a, type: 2}

@@ -2,32 +2,33 @@ using System;
 using System.Collections.Generic;
 using _Scripts._Items;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Scripts._Ui
 {
     public class InventoryViewController : MonoBehaviour
     {
         [SerializeField] private Transform itemsContentPanel;
-        [SerializeField] private ItemDisplay itemDisplayPrefab;
+        [FormerlySerializedAs("itemDisplayPrefab")] [SerializeField] private ItemDisplayInventory itemDisplayInventoryPrefab;
 
-        private List<(ItemSlot, ItemDisplay)> itemSlotsDisplay;
+        private List<ItemDisplayInventory> itemSlotsDisplay;
         
         public Action<Item> OnItemDropped;
         
-        public void RebuildInventoryView(ItemSlot[] itemSlots)
+        public void RebuildInventoryView(Inventory inventory)
         {
             ClearInventoryView();
             
-            for (int i = 0; i < itemSlots.Length; i++)
+            for (int i = 0; i < inventory.inventorySlots.Length; i++)
             {
-                if (!itemSlots[i].IsEmpty())
+                if (!inventory.inventorySlots[i].IsEmpty())
                 {
-                    var display = GenericObjectPooler.SpawnObject(itemDisplayPrefab.gameObject, Vector3.zero, Quaternion.identity, GenericObjectPooler.PoolType.ItemDisplay).GetComponent<ItemDisplay>();
+                    var display = GenericObjectPooler.SpawnObject(itemDisplayInventoryPrefab.gameObject, Vector3.zero, Quaternion.identity, GenericObjectPooler.PoolType.ItemDisplay).GetComponent<ItemDisplayInventory>();
                     display.transform.SetParent(itemsContentPanel);
-                    itemSlotsDisplay.Add((itemSlots[i], display));
+                    itemSlotsDisplay.Add( display);
                     display.OnItemDropped += ItemDropped;
                     
-                    display.SetUp(itemSlots[i]);
+                    display.SetUp(inventory.inventorySlots[i]);
                 }
             }
         }
@@ -47,8 +48,8 @@ namespace _Scripts._Ui
             {
                 for (int i = 0; i < itemSlotsDisplay.Count; i++)
                 {
-                    itemSlotsDisplay[i].Item2.OnItemDropped -= ItemDropped;
-                    GenericObjectPooler.ReturnObjectToPool(itemSlotsDisplay[i].Item2.gameObject);
+                    itemSlotsDisplay[i].OnItemDropped -= ItemDropped;
+                    GenericObjectPooler.ReturnObjectToPool(itemSlotsDisplay[i].gameObject);
                 }
                 itemSlotsDisplay = new();
             }

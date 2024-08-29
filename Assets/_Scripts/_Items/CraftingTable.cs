@@ -8,5 +8,7 @@ namespace _Scripts._Items
     public class CraftingRecipeTable : ScriptableObject
     {
         [SerializeField] private CraftingRecipe[] recpies;
+
+        public CraftingRecipe[] Recpies => recpies;
     }
 }

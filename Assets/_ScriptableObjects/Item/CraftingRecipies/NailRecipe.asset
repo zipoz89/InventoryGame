@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: NailRecipe
   m_EditorClassIdentifier: 
   Ingredients:
-  - Item: {fileID: 11400000, guid: 49dc5d74ccac05a4da39d1dcc1147a0e, type: 2}
-    Amount: 1
-  - Item: {fileID: 11400000, guid: 49dc5d74ccac05a4da39d1dcc1147a0e, type: 2}
-    Amount: 1
+  - item: {fileID: 11400000, guid: 49dc5d74ccac05a4da39d1dcc1147a0e, type: 2}
+    Amount: 2
   Result:
-  - Item: {fileID: 11400000, guid: 3cdcf8ab38a960a41b1e295554456763, type: 2}
+  - item: {fileID: 11400000, guid: 3cdcf8ab38a960a41b1e295554456763, type: 2}
     Amount: 1
   CraftingChance: 60
