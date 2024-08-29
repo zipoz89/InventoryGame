@@ -12,6 +12,14 @@ namespace _Scripts._Items
 
         public bool CheckIfCraftable(Inventory inventory)
         {
+            foreach (var ingredient in Ingredients)
+            {
+                if (!inventory.Contrains(ingredient.item.Item, ingredient.Amount))
+                {
+                    return false;
+                }
+            }
+            
             return true;
         }
     }

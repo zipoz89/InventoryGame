@@ -14,6 +14,26 @@
             }
         }
 
+        public bool Contrains(Item item, int amount)
+        {
+            int amountFound = 0;
+
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                if (inventorySlots[i].item == item)
+                {
+                    amountFound += inventorySlots[i].Amount;
+                }
+
+                if (amountFound >= amount)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool TryCollectItem(Item item)
         {
             for (int i = 0; i < inventorySlots.Length; i++)
