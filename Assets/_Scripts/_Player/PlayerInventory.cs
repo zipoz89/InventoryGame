@@ -1,5 +1,6 @@
 ﻿using _Scripts._InputSystem;
 using _Scripts._Items;
+using _Scripts._Ui;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,8 +10,9 @@ namespace _Scripts._Player
     {
         [SerializeField] private int startingSlots = 10;
         [SerializeField] private GameObject inventoryView;
+        [SerializeField] private InventoryPanelController inventoryPanelController;
         
-        [FormerlySerializedAs("items")] [SerializeField] private ItemSlot[] itemSlots;
+        [SerializeField] private ItemSlot[] itemSlots;
         
         private InputProvider _inputProvider;
 
@@ -36,6 +38,7 @@ namespace _Scripts._Player
             {
                 if (itemSlots[i].TryAddItem(item))
                 {
+                    inventoryPanelController.RebuildInventoryView(itemSlots);
                     return true;
                 }
             }
@@ -45,7 +48,6 @@ namespace _Scripts._Player
 
         private void SwitchInventory(bool pressed)
         {
-            Debug.Log(pressed);
             if (pressed)
             {
                 if (isInventoryOpen)
@@ -61,6 +63,7 @@ namespace _Scripts._Player
                 }
                 else
                 {
+                    inventoryPanelController.RebuildInventoryView(itemSlots);
                     isInventoryOpen = true;
                     inventoryView.SetActive(isInventoryOpen);
                     

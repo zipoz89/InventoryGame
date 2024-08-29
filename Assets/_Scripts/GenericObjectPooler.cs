@@ -6,7 +6,7 @@ using UnityEngine;
 namespace _Scripts
 {
     // to jest mój bardzo hacky system do super szybkiego setapuwoanego poolowania
-    public class ObjectPoolManager : MonoBehaviour
+    public class GenericObjectPooler : MonoBehaviour
     {
         public static List<PooledObjectInfo> ObjectPools = new();
 

@@ -10,7 +10,7 @@ namespace _Scripts._Items
 
         public bool TryAddItem(Item itemToAdd)
         {
-            if (item == null)
+            if (item == null || item.Name == "")
             {
                 item = itemToAdd;
                 Amount = 1;
@@ -25,6 +25,11 @@ namespace _Scripts._Items
             {
                 return false;
             }
+        }
+
+        public bool IsEmpty()
+        {
+            return item == null;
         }
     }
 }
