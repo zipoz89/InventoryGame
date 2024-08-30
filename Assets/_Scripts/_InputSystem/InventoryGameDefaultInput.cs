@@ -53,6 +53,15 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""44c2f4b3-9732-4aa5-ba08-02532a55a726"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bcceed4f-acd5-437d-af57-5feccfc2b861"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
         m_FPSPlayer_Move = m_FPSPlayer.FindAction("Move", throwIfNotFound: true);
         m_FPSPlayer_Jump = m_FPSPlayer.FindAction("Jump", throwIfNotFound: true);
         m_FPSPlayer_Interact = m_FPSPlayer.FindAction("Interact", throwIfNotFound: true);
+        m_FPSPlayer_OpenInventory = m_FPSPlayer.FindAction("OpenInventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
     private readonly InputAction m_FPSPlayer_Move;
     private readonly InputAction m_FPSPlayer_Jump;
     private readonly InputAction m_FPSPlayer_Interact;
+    private readonly InputAction m_FPSPlayer_OpenInventory;
     public struct FPSPlayerActions
     {
         private @InventoryGameDefaultInput m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
         public InputAction @Move => m_Wrapper.m_FPSPlayer_Move;
         public InputAction @Jump => m_Wrapper.m_FPSPlayer_Jump;
         public InputAction @Interact => m_Wrapper.m_FPSPlayer_Interact;
+        public InputAction @OpenInventory => m_Wrapper.m_FPSPlayer_OpenInventory;
         public InputActionMap Get() { return m_Wrapper.m_FPSPlayer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @OpenInventory.started += instance.OnOpenInventory;
+            @OpenInventory.performed += instance.OnOpenInventory;
+            @OpenInventory.canceled += instance.OnOpenInventory;
         }
 
         private void UnregisterCallbacks(IFPSPlayerActions instance)
@@ -245,6 +271,9 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @OpenInventory.started -= instance.OnOpenInventory;
+            @OpenInventory.performed -= instance.OnOpenInventory;
+            @OpenInventory.canceled -= instance.OnOpenInventory;
         }
 
         public void RemoveCallbacks(IFPSPlayerActions instance)
@@ -267,5 +296,6 @@ public partial class @InventoryGameDefaultInput: IInputActionCollection2, IDispo
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnOpenInventory(InputAction.CallbackContext context);
     }
 }

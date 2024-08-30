@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Scripts._InputSystem;
 using UnityEngine;
 
 namespace _Scripts._Player
@@ -83,7 +84,7 @@ namespace _Scripts._Player
         // Player commands, stores wish commands that the player asks for (Forward, back, jump, etc)
         private Cmd _cmd;
 
-
+        private bool isInventoryOpen = false;
 
         private void OnDestroy()
         {
@@ -106,6 +107,7 @@ namespace _Scripts._Player
         public void Initialize(InputProvider input)
         {
             _inputProvider = input;
+            
             SubscribeToInput();
             
             /* Ensure that the cursor is locked into the screen */

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using _Scripts._InputSystem;
+using _Scripts._Items;
+using UnityEngine;
 
 namespace _Scripts._Player
 {
@@ -7,11 +9,13 @@ namespace _Scripts._Player
         [SerializeField] private Camera camera;
         [SerializeField] private float interactionDistance = 5f;
         private InputProvider _inputProvider;
+        private PlayerInventoryController _playerInventoryController;
         private IInteractable activeInteracable;
 
-        public void Initialize(InputProvider input)
+        public void Initialize(InputProvider input, PlayerInventoryController playerInventoryController)
         {
             _inputProvider = input;
+            _playerInventoryController = playerInventoryController;
             _inputProvider.OnInteract += Interact;
         }
 
@@ -41,9 +45,22 @@ namespace _Scripts._Player
             }
         }
 
-        public void CollcetItem()
+        public bool TryCollectItem(Item item)
         {
-            Debug.Log("Collect");
+            return _playerInventoryController.TryCollectItem(item);
         }
+        
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out ItemDrop itemDrop))
+            {
+                if ( _playerInventoryController.TryCollectItem(itemDrop.Item))
+                {
+                    itemDrop.Item = null;
+                    GenericObjectPooler.ReturnObjectToPool(itemDrop.gameObject, true);
+                }
+            }
+        }
+        
     }
 }
