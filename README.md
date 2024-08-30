@@ -18,6 +18,7 @@ Shortcuts i took that might be bad design but I used them for time saving
 -No Game controller or ui aggregate  controller - the player is "main" class but it also might be used for easier multiplayer implementation
 -Dependency injection by SerializedFields
 -VFX are very simple (no time for experimentation)
+-UI is awful
 
 
 Atributions:
