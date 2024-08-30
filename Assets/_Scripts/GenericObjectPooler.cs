@@ -56,9 +56,10 @@ namespace _Scripts
                 spawnableObj.transform.rotation = spawnRotation;
                 spawnableObj.transform.SetParent(poolParents[poolType]);
                 pool.InactiveObjects.Remove(spawnableObj);
-                spawnableObj.SetActive(true);
+                
             }
-
+            spawnableObj.SetActive(true);
+            
             return spawnableObj;
         }
 

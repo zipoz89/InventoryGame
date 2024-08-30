@@ -40,12 +40,20 @@ namespace _Scripts._Items
         {
             for (int i = 0; i < inventorySlots.Length; i++)
             {
-                if (inventorySlots[i].TryAddItem(item))
+                if (inventorySlots[i].item != null && inventorySlots[i].item.Name == item.Name && inventorySlots[i].TryAddItem(item))
                 {
                     return true;
                 }
             }
 
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                if (inventorySlots[i].TryAddItem(item))
+                {
+                    return true;
+                }
+            }
+            
             return false;
         }
 

@@ -56,7 +56,6 @@ namespace _Scripts._Ui
 
         private void OnCraft(CraftingRecipe recpie)
         {
-            Debug.Log("tet 1");
             OnRecipeCraft?.Invoke(recpie);
         }
     }

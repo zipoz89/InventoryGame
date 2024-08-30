@@ -19,8 +19,6 @@ namespace _Scripts._Ui
         {
             ClearInventoryView();
             
-            Debug.Log("Rebuilduje?");
-            
             for (int i = 0; i < inventory.inventorySlots.Length; i++)
             {
                 if (!inventory.inventorySlots[i].IsEmpty())
