@@ -1,5 +1,11 @@
+/*
 
 
+    Zacząłem implementacje tego controllera przed dostaniem informacji o wykorzaystywaniu gotowych rozwiązań.
+    Sam swoją drogą jestem zdania że wynajdywanie koła na nowo bez żadnych ulepszeń to tracenie czasu.
+
+
+*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
